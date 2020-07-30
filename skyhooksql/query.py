@@ -24,7 +24,7 @@ class Query():
                         'header'           : True,
                         'pool'             : 'tpchdata',
                         'num-objs'         : '2',
-                        'oid-prefix'       : '\"public\"',
+                        'oid-prefix'       : 'public',
                         'path_to_run_query': self.sk_runner.default_path}
 
         self.query = {'selection'  : '',

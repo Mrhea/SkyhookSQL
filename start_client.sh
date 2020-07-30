@@ -1,1 +1,1 @@
-python3 -m interface.client
+python3 -m skyhooksql.client

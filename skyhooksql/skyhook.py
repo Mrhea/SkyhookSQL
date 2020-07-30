@@ -14,7 +14,7 @@ class SkyhookRunner:
         command_args = [
             '--num-objs'   , options['num-objs'],
             '--pool'       , options['pool'],
-            '--oid-prefix' , options['oid-prefix'],
+            '--oid-prefix' , "\"{}\"".format(options['oid-prefix']),
             '--table-name' , "\"{}\"".format(query['table-name'])
         ]
 
