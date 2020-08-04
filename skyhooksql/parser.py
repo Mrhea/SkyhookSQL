@@ -3,15 +3,13 @@ from sqlparse.tokens import Keyword, DML
 from sqlparse.sql import IdentifierList, Identifier, Where, Parenthesis, Comparison
 
 class SQLParser():
-    '''
-    A class that parses SQL statements. 
-    '''
+    """A class that parses SQL statements."""
 
     @classmethod
     def parse_query(cls, raw_query):
-        '''
-        A function that parses a SQL string into a dictionary representation. 
-        '''
+        """A function that parses a SQL string into a dictionary representation. 
+
+        """
         try:
             assert isinstance(raw_query, str)
         except AssertionError as error:

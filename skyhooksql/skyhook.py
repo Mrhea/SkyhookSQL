@@ -2,15 +2,13 @@ import os
 import subprocess
 
 class SkyhookRunner:
-    '''
-    A class that builds Skyhook CLI commands and executes them. 
-    '''
+    """A class that builds Skyhook CLI commands and executes them."""
 
     @classmethod
     def create_sk_cmd(cls, query, options):
-        '''
-        A function that generates the Skyhook CLI command from a Query Object. 
-        '''
+        """A function that generates the Skyhook CLI command from a Query Object. 
+
+        """
         command_args = [
             options['path_to_run_query'],
             
@@ -49,9 +47,9 @@ class SkyhookRunner:
 
     @classmethod
     def execute_sk_cmd(cls, command_args):
-        '''
-        A function that executes a Skyhook CLI command. 
-        '''
+        """A function that executes a Skyhook CLI command. 
+
+        """
         # result = os.popen("cd " + command).read()
         # return result
         cmd_completion = subprocess.run(command_args, check=True, stdout=subprocess.PIPE)
@@ -59,18 +57,16 @@ class SkyhookRunner:
 
     @classmethod
     def run_query(cls, query, options): 
-        '''
-        A function that generates and executes a Skyhook CLI command starting from 
-        a Query object. 
-        '''
+        """A function that generates and executes a Skyhook CLI command from a query object. 
+
+        """
         command_args = create_sk_cmd(query, options)
 
         return self.execute_command(command_args)
 
     @classmethod
     def package_arrow_objects(cls):
-        '''
-        A function to coordinate the joining of arrow objects return from a Skyhook CLI 
-        command execution. 
-        '''
+        """A function to coordinate the joining of arrow objects return from a Skyhook CLI command execution. 
+
+        """
         raise NotImplementedError
