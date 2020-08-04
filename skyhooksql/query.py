@@ -15,9 +15,9 @@ class Query():
                         'oid-prefix'       : 'public',
                         'path_to_run_query': '~/skyhookdm-ceph/build/ && bin/run-query'}
 
-        self.query = {'selection'  : {},
-                      'projection' : {},
-                      'table-name' : {}}
+        self.query = {'selection'  : '',
+                      'projection' : '',
+                      'table-name' : ''}
         
         self.results = None
 
@@ -61,7 +61,10 @@ class Query():
         Arguments:
         args -- 
         """
-        self.query['selection'] = select.split(', ')
+        for arg in args:
+            if not isinstance(arg, str):
+                raise NotImplementedError
+            self.query['selection'] = arg.split(', ')
 
     def set_projection(self, *args):
         """Sets the projection parameter for a query.
@@ -69,7 +72,10 @@ class Query():
         Arguments:
         args -- A comma separated string of names of attributes
         """
-        self.query['projection'] = project
+        for arg in args:
+            if not isinstance(arg, str):
+                raise NotImplementedError
+            self.query['projection'] = arg
 
     def set_table_name(self, *args):
         """Sets the table name parameter for a query.
@@ -77,7 +83,10 @@ class Query():
         Arguments:
         args -- A comma separated string of names of tables
         """
-        self.query['table-name'] = table_name
+        for arg in args:
+            if not isinstance(arg, str):
+                raise NotImplementedError
+            self.query['table-name'] = arg
 
     def set_option(self, option, value):
         """ Sets the option to be the given value.
