@@ -1,16 +1,14 @@
-import os
 import sqlparse
 from sqlparse.tokens import Keyword, DML
 from sqlparse.sql import IdentifierList, Identifier, Where, Parenthesis, Comparison
 
 class SQLParser():
-    def __init__(self):
-        '''
-        A class that parses SQL statements. 
-        '''
-        pass
+    '''
+    A class that parses SQL statements. 
+    '''
 
-    def parse_query(self, raw_query):
+    @classmethod
+    def parse_query(cls, raw_query):
         '''
         A function that parses a SQL string into a dictionary representation. 
         '''

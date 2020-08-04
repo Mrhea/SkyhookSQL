@@ -1,17 +1,19 @@
 import os
+import subprocess
 
 class SkyhookRunner:
-    def __init__(self):
-        '''
-        A class that 
-        '''
-        self.default_path = "~/skyhookdm-ceph/build/ && bin/run-query"
+    '''
+    A class that builds Skyhook CLI commands and executes them. 
+    '''
 
-    def create_sk_cmd(self, query, options):
+    @classmethod
+    def create_sk_cmd(cls, query, options):
         '''
         A function that generates the Skyhook CLI command from a Query Object. 
         '''
         command_args = [
+            options['path_to_run_query'],
+            
             '--num-objs'   , options['num-objs'],
             '--pool'       , options['pool'],
             '--oid-prefix' , "\"{}\"".format(options['oid-prefix']),
@@ -38,32 +40,35 @@ class SkyhookRunner:
                                                                         query['selection'][0],
                                                                         query['selection'][2]))
 
-        skyhook_cmd = self.default_path
+        skyhook_cmd = options['path_to_run_query']
         for arg in command_args:
             skyhook_cmd = ' '.join([skyhook_cmd, str(arg)])
 
-        return skyhook_cmd
+        # return skyhook_cmd
+        yield command_args
 
-
-    def execute_sk_cmd(self, command):
+    @classmethod
+    def execute_sk_cmd(cls, command_args):
         '''
         A function that executes a Skyhook CLI command. 
         '''
-        result = os.popen("cd " + command).read()
-        return result
+        # result = os.popen("cd " + command).read()
+        # return result
+        cmd_completion = subprocess.run(command_args, check=True, stdout=subprocess.PIPE)
+        return cmd_completion.stdout
 
-    def run_query(self, query): 
+    @classmethod
+    def run_query(cls, query, options): 
         '''
         A function that generates and executes a Skyhook CLI command starting from 
         a Query object. 
         '''
-        cmd = create_sk_cmd(query)
+        command_args = create_sk_cmd(query, options)
 
-        result = self.execute_command(cmd)
-        
-        return result
+        return self.execute_command(command_args)
 
-    def package_arrow_objects(self):
+    @classmethod
+    def package_arrow_objects(cls):
         '''
         A function to coordinate the joining of arrow objects return from a Skyhook CLI 
         command execution. 

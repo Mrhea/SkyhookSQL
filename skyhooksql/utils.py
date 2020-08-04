@@ -19,7 +19,7 @@ Supported syntax:
 \t Selections  (EXAMPLE: SELECT orderkey FROM lineitem WHERE orderkey<3;)
 \t Show Schema (EXAMPLE: DESCRIBE TABLE lineitem)
 '''
-        )
+)
 
 
 def print_intro_msg():

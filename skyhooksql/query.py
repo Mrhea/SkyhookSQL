@@ -6,17 +6,6 @@ class Query():
         '''
         A class that represents a mutable SQL query object.
         '''
-
-        '''
-        sk_runner keeps track of parsed segments, option handling, and query execution. 
-        '''
-        self.sk_runner = SkyhookRunner()
-        
-        '''        
-        sql_parser translates raw SQL statements to dictionary representation
-        '''
-        self.sql_parser = SQLParser()
-
         self.raw_query = ''
 
         self.options = {'cls'              : True,
@@ -25,13 +14,12 @@ class Query():
                         'pool'             : 'tpchdata',
                         'num-objs'         : '2',
                         'oid-prefix'       : 'public',
-                        'path_to_run_query': self.sk_runner.default_path}
+                        'path_to_run_query': '~/skyhookdm-ceph/build/ && bin/run-query'}
 
         self.query = {'selection'  : '',
                       'projection' : '',
                       'table-name' : ''}
         
-        self.sk_cmd = ''
         self.results = None
 
     def sql(self, statement):
@@ -39,7 +27,7 @@ class Query():
         Parses SQL statement and sets Query object parameters. 
         '''
         self.raw_query = statement
-        parsed = self.parse_query(statement)
+        parsed = SQLParser.parse_query(statement)
         self.set_table_name(parsed['table-name'])
         self.set_projection(parsed['projection'])
         self.set_selection(parsed['selection'])
@@ -49,15 +37,14 @@ class Query():
         A function that executes the Skyhook CLI command by calling the run-query
         binary.
         '''
-        self.create_sk_cmd()
-        self.results = self.sk_runner.execute_sk_cmd(self.sk_cmd)
+        self.results = SkyhookRunner.run_query(self.query, self.options)
 
-    def query_lifetime(self, raw_query):
+    def lifetime(self, raw_query):
         '''
         A function that performs a full query execution starting from a SQL statement, parsing it,
         setting the Query object's settings, generating a Skyhook command, and executing the command. 
         '''
-        query = self.sql_parser.parse_query(raw_query)
+        query = SQLParser.parse_query(raw_query)
 
         self.set_projection(query['projection'])
         
@@ -68,20 +55,6 @@ class Query():
         self.create_sk_cmd()
 
         self.run()
-
-    def parse_query(self, statement):
-        '''
-        Parses a SQL statement and returns dictionary representation.
-        '''
-        res = self.sql_parser.parse_query(statement)
-        return res
-
-    def create_sk_cmd(self):
-        '''
-        A function that generates the Skyhook CLI command representation of the 
-        query object. 
-        '''
-        self.sk_cmd = self.sk_runner.create_sk_cmd(self.query, self.options)
 
     def generate_pyarrow_dataframe(self):
         '''
