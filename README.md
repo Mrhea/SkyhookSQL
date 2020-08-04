@@ -5,8 +5,8 @@ you have already completed the build steps to make SkyhookDM-Ceph and are ready 
 
 ## How to run 
 
-* Run `setup.sh` to install depedencies and create ceph pool. Currently it is assumed that the object type of the data will be `SFT_FLATBUF_FLEX_ROW` with pool name `tpchdata` and number of objects at `2`.
+* Run `run_tests.sh` to run tests.
 
-* Run `startup.sh` to run the client 
+* Run `start_client.sh` to run the client 
 
-* For custom options do not run `startup.sh`, and instead run `python3 -m interface.client -h` to show options. 
+* For custom options do not run `start_client.sh`, and instead run `python3 -m skyhooksql.client -h` to show options. 

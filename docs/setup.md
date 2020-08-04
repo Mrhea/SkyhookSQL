@@ -1,7 +1,3 @@
 ### Setup SkyhookDM SQL Client
 
-(Assuming you have already past the build stage and ready to run test queries)
-
-* Run the setup.sh script to check and install depdencies and create ceph pool with test data.
-
-* Run startup.sh to start python shell for SQL interface.
+SkyhookSQL requires that you have already completed the [build](https://github.com/uccross/skyhookdm-ceph/wiki/Build) and [test](https://github.com/uccross/skyhookdm-ceph/wiki/Run-test-queries) setup steps from the [Skyhook wiki](https://github.com/uccross/skyhookdm-ceph/wiki). 

@@ -5,4 +5,6 @@
 * `SELECT orderkey,tax,comment,linenumber,returnflag FROM lineitem;`
 * `SELECT linenumber,returnflag FROM lineitem`
 * `SELECT returnflag FROM lineitem;` 
+* `SELECT orderkey FROM lineitem WHERE orderkey > 3`
+* `SELECT orderkey,linenumber WHERE orderkey <> 2`
 
