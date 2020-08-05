@@ -55,45 +55,58 @@ class Query():
 
         self.run()
 
-    def set_selection(self, *args):
+    def set_selection(self, *values):
         """Sets the selection parameter for a query.
 
         Arguments:
-        args -- 
+        values -- Any number of strings of predicates 
         """
-        for arg in args:
-            if not isinstance(arg, str):
-                raise NotImplementedError
-            self.query['selection'] = arg.split(', ')
+        predicates = []
+        for value in values:
+            if not isinstance(value, str):
+                raise TypeError("Value of predicate must be a string")
+            if len(value.split()) != 3:
+                raise ValueError("Expected predicate formatted: \"<comparison>,<operand>,<operand>\"")
+            # TODO: Maybe the operators belongs in utils or SkyhookRunner? 
+            operators = ['geq', 'leq', 'ne', 'eq', 'gt', 'lt', 'like']
+            comparison_op = value.split()[0].strip(', ')
+            if comparison_op not in operators:
+                raise ValueError("Comparison operator \'{}\' is not in {}".format(comparison_op, operators))
+            predicates.append(value)
+            self.query['selection'] = predicates
 
-    def set_projection(self, *args):
+    def set_projection(self, *values):
         """Sets the projection parameter for a query.
 
         Arguments:
-        args -- A comma separated string of names of attributes
+        values -- Any number of strings of names of attributes
         """
-        for arg in args:
-            if not isinstance(arg, str):
-                raise NotImplementedError
-            self.query['projection'] = arg
+        attributes = []
+        for value in values:
+            if not isinstance(value, str):
+                raise TypeError("Value of attribute must be a string")
+            attributes.append(value)
+        self.query['projection'] = ','.join(attributes)
 
-    def set_table_name(self, *args):
+    def set_table_name(self, *values):
         """Sets the table name parameter for a query.
 
         Arguments:
-        args -- A comma separated string of names of tables
+        values -- Any number of strings of table names
         """
-        for arg in args:
-            if not isinstance(arg, str):
-                raise NotImplementedError
-            self.query['table-name'] = arg
+        table_names = []
+        for value in values:
+            if not isinstance(value, str):
+                raise TypeError("Value of table name must be a string")
+            table_names.append(value)
+        self.query['table-name'] = ','.join(table_names)
 
     def set_option(self, option, value):
-        """ Sets the option to be the given value.
+        """Sets the option to be the given value.
 
         Arguments:
-        option -- 
-        value  -- 
+        option -- The string name of the option to be changed
+        value  -- The string value of the option to be set
         """
         if option not in self.options.keys():
             print("Error: Not an option")
@@ -101,19 +114,19 @@ class Query():
         self.options[str(option)] = value 
 
     def show_query(self):
-        """ A function that shows the current Query object."""
+        """A function that shows the current Query object."""
         print(self.query)
 
     def show_options(self):
-        """ A function that shows the current options being used."""
+        """A function that shows the current options being used."""
         print(self.options)
 
     def show_results(self):
-        """ A function that shows the results of the previously ran query."""
+        """A function that shows the results of the previously ran query."""
         print(self.results)
 
     def show_sk_cmd(self):
-        """ A function that shows the Skyhook CLI command representation of the query object."""
+        """A function that shows the Skyhook CLI command representation of the query object."""
         sk_cmd = SkyhookRunner.create_sk_cmd(self.query, self.options)
         print(sk_cmd)
 
