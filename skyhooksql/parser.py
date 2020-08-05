@@ -80,6 +80,8 @@ class SQLParser():
                         yield item.get_name()
 
             def format_ids(identifiers):
+                if len(identifiers) == 0:
+                    return ''
                 formatted_ids = ', '.join(identifiers)
                 return formatted_ids                
 
@@ -103,5 +105,7 @@ class SQLParser():
         tokenized = sqlparse.parse(sql_statement)[0]
 
         parsed = parse_clauses(tokenized)
+
+        print(parsed)
 
         return parsed

@@ -15,9 +15,9 @@ class Query():
                         'oid-prefix'       : 'public',
                         'path_to_run_query': '~/skyhookdm-ceph/build/ && bin/run-query'}
 
-        self.query = {'selection'  : '',
-                      'projection' : '',
-                      'table-name' : ''}
+        self.query = {'selection'  : [],
+                      'projection' : [],
+                      'table-name' : []}
         
         self.results = None
 
@@ -38,7 +38,7 @@ class Query():
         self.results = SkyhookRunner.run_query(self.query, self.options)
 
     def lifetime(self, statement):
-        """A function that performs a full query execution. 
+        """A function that performs a full SQL query execution. 
 
         Arguments:
         statement -- A string parsed as an unvalidated SQL statement
@@ -59,7 +59,7 @@ class Query():
         """Sets the selection parameter for a query.
 
         Arguments:
-        values -- Any number of strings of predicates 
+        values -- Any number of strings of predicates of the form \"<comparison>,<operand>,<operand>\"
         """
         predicates = []
         for value in values:
