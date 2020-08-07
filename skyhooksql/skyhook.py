@@ -6,8 +6,14 @@ class SkyhookRunner:
 
     @classmethod
     def create_sk_cmd(cls, query, options):
-        """A function that generates the Skyhook CLI command from a Query Object. 
+        """A function that yields a generator for the Skyhook CLI command from a Query Object. 
 
+        Arguments:
+        query   -- A Query dictionary  
+        options -- A dictionary of Skyhook options
+
+        Returns:
+        skyhook_cmd -- A list of the arguments of the Skyhook run-query command stirng
         """
         command_args = [
             options['path_to_run_query'],
@@ -15,7 +21,7 @@ class SkyhookRunner:
             '--num-objs'   , options['num-objs'],
             '--pool'       , options['pool'],
             '--oid-prefix' , "\"{}\"".format(options['oid-prefix']),
-            '--table-name' , "\"{}\"".format(query['table-name'])
+            '--table-name' , "\"{}\"".format(','.join(query['table-name']))
         ]
 
         if options['header']:
@@ -28,27 +34,23 @@ class SkyhookRunner:
             command_args.append("--quiet")
 
         if query['projection']:
-            projection = query['projection'].replace(' ','')
+            projection = ','.join(query['projection'])
             command_args.append("--project \"{}\" ".format(projection))
 
         if query['selection']:
-            # TODO: Make order here not matter. Maybe dicts? 
-            if len(query['selection']) == 3:
-                command_args.append("--select \"{0},{1},{2}\" ".format(query['selection'][1],
-                                                                        query['selection'][0],
-                                                                        query['selection'][2]))
+            predicates = ';'.join(query['selection'])
+            command_args.append("--select \"{}\"".format(predicates))
 
-        skyhook_cmd = options['path_to_run_query']
-        for arg in command_args:
-            skyhook_cmd = ' '.join([skyhook_cmd, str(arg)])
-
-        # return skyhook_cmd
-        yield command_args
+        return command_args
 
     @classmethod
     def execute_sk_cmd(cls, command_args):
         """A function that executes a Skyhook CLI command. 
 
+        Arguments:
+        command_args -- A list of arguments to be executed in which the first must be a path to Skyhook's run-query binary
+
+        Returns: The stdout results of a subprocess execution of command_args 
         """
         # result = os.popen("cd " + command).read()
         # return result
@@ -59,6 +61,11 @@ class SkyhookRunner:
     def run_query(cls, query, options): 
         """A function that generates and executes a Skyhook CLI command from a query object. 
 
+        Arguments: 
+        query   -- A Query dictionary
+        options -- A dictionary of Skyhook options 
+
+        Returns: The results of a query execution
         """
         command_args = create_sk_cmd(query, options)
 

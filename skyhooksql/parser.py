@@ -9,6 +9,11 @@ class SQLParser():
     def parse_query(cls, raw_query):
         """A function that parses a SQL string into a dictionary representation. 
 
+        Arguments:
+        raw_query -- A string SQL statement
+
+        Returns:
+        query -- A dictionary representation of a SQL string
         """
         try:
             assert isinstance(raw_query, str)
@@ -37,6 +42,7 @@ class SQLParser():
                     if isinstance(item, Where):
                         for i in item.tokens:
                             if isinstance(i, Comparison):
+                                where_tokens.append(str(i.left))
                                 operation = str(i).split(" ")[1]
                                 for op in allowed_ops:
                                     if op == operation:
@@ -44,9 +50,7 @@ class SQLParser():
                                         break
                                     if op.upper() == 'LIKE':
                                         where_tokens.append(operator_strs[op.upper()])
-                                where_tokens.append(str(i.left))
                                 where_tokens.append(str(i.right))
-                
                 return where_tokens
 
             def parse_from_clause(parsed):
@@ -105,7 +109,5 @@ class SQLParser():
         tokenized = sqlparse.parse(sql_statement)[0]
 
         parsed = parse_clauses(tokenized)
-
-        print(parsed)
 
         return parsed

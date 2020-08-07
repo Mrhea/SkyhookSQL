@@ -13,7 +13,7 @@ class Query():
                         'pool'             : 'tpchdata',
                         'num-objs'         : '2',
                         'oid-prefix'       : 'public',
-                        'path_to_run_query': '~/skyhookdm-ceph/build/ && bin/run-query'}
+                        'path_to_run_query': 'cd ~/skyhookdm-ceph/build/ && bin/run-query'}
 
         self.query = {'selection'  : [],
                       'projection' : [],
@@ -67,9 +67,9 @@ class Query():
                 raise TypeError("Value of predicate must be a string")
             if len(value.split()) != 3:
                 raise ValueError("Expected predicate formatted: \"<comparison>,<operand>,<operand>\"")
-            # TODO: Maybe the operators belongs in utils or SkyhookRunner? 
+            # TODO: Opertors belong in utils or SkyhookRunner? 
             operators = ['geq', 'leq', 'ne', 'eq', 'gt', 'lt', 'like']
-            comparison_op = value.split()[0].strip(', ')
+            comparison_op = value.split()[1].strip(', ')
             if comparison_op not in operators:
                 raise ValueError("Comparison operator \'{}\' is not in {}".format(comparison_op, operators))
             predicates.append(value)
@@ -86,7 +86,7 @@ class Query():
             if not isinstance(value, str):
                 raise TypeError("Value of attribute must be a string")
             attributes.append(value)
-        self.query['projection'] = ','.join(attributes)
+        self.query['projection'] = attributes
 
     def set_table_name(self, *values):
         """Sets the table name parameter for a query.
@@ -99,7 +99,7 @@ class Query():
             if not isinstance(value, str):
                 raise TypeError("Value of table name must be a string")
             table_names.append(value)
-        self.query['table-name'] = ','.join(table_names)
+        self.query['table-name'] = table_names
 
     def set_option(self, option, value):
         """Sets the option to be the given value.
@@ -114,19 +114,19 @@ class Query():
         self.options[str(option)] = value 
 
     def show_query(self):
-        """A function that shows the current Query object."""
+        """A function that prints the current Query object."""
         print(self.query)
 
     def show_options(self):
-        """A function that shows the current options being used."""
+        """A function that prints the current options being used."""
         print(self.options)
 
     def show_results(self):
-        """A function that shows the results of the previously ran query."""
+        """A function that prints the results of the previously ran query."""
         print(self.results)
 
     def show_sk_cmd(self):
-        """A function that shows the Skyhook CLI command representation of the query object."""
+        """A function that prints the Skyhook CLI command representation of the query object."""
         sk_cmd = SkyhookRunner.create_sk_cmd(self.query, self.options)
         print(sk_cmd)
 
